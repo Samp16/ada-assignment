@@ -1,33 +1,39 @@
-#include<iostream>
-using namespace std;
-
-void Mat(int d[],int n) //Function that calculates the minimum chain multiplication and finds the equation
+#include<stdio.h>
+#include<stdlib.h>
+#define INF 9999
+int MatrixChainOrder(int arr[], int n)
 {
-  int a[n][n],b[n],min,count=0;
-  bool var[n];
-  string eq="(";
-
-  for(int i=0;i<n;i++)
-  {
-    var[i]=false; //Sets all values in the array to false to prevent garbage values
-
-    for(int j=0;j<n-i;j++)
-    {
-      a[j][j+i]=9999; //Sets the initial matrix cell to a large integer to get replaced by the calculated value on first run
-
-      for(int k=j;k<j+i;k++)
-      {
-        min=a[j][k]+a[k+1][j+i]+(d[j]*d[k+1]*d[j+i+1]); //Finds the value for respective K value using the formula
-
-        if(min<a[j][j+i]) //Replaces the stored value in matrix cell with a minimum value
-        {
-          a[j][j+i]=min;
-          if(j==0)
-            b[j+i]=k;
-        }
-      }
-
-      if(i==0) //Used to set all diagonal matrix cells to 0
-        a[j][j+i]=0;
-    }
-  }
+	int p[n][n];
+	int i, j, k, l, q;
+	for (i = 1; i < n; i++)
+		p[i][i] = 0;
+	for (l = 2; l < n; l++)
+	{
+		for (i = 1; i < n - l + 1; i++)
+		{
+			j = i + l - 1;
+			p[i][j] = INF;
+			for (k = i; k <= j - 1; k++)
+			{
+			       q = p[i][k] + p[k + 1][j]
+					+ arr[i - 1] * arr[k] * arr[j];
+				if (q < p[i][j])
+					p[i][j] = q;
+			}
+		}
+	}
+	return p[1][n - 1];
+}
+int main()
+{
+  int n;
+  printf("Enter the size of the array\n");
+  scanf("%d",&n);
+  int arr[n];
+  printf("Enter the array\n");
+  for(int i=0;i<n;i++){
+  scanf("%d",&arr[i]);
+}
+  printf("The Minimum number of matrix multiplications is %d ",MatrixChainOrder(arr, n));
+	return 0;
+}
